@@ -14,6 +14,8 @@ public class MovementScript : MonoBehaviour
     [SerializeField] GameObject slapObject;
     private bool isSlapped;
     private bool isP2;
+    public int playerNumber;
+    public Gamepad myController;
 
     void Start()
     {
@@ -26,69 +28,35 @@ public class MovementScript : MonoBehaviour
     {
         if (!isSlapped)
         {
-            if (isP2 != true)
+            if (_thisRB.linearVelocity.magnitude > playerSpeed)
             {
-                if (_thisRB.linearVelocity.magnitude > playerSpeed)
-                {
-                    _thisRB.linearVelocity = Vector3.ClampMagnitude(_thisRB.linearVelocity, playerSpeed);
-                }
-    
-                if (_thisKB.wKey.isPressed)
-                {
-                    _thisRB.linearVelocity = new Vector3(_thisRB.linearVelocity.x, 0, (_thisRB.linearVelocity.z + playerAccel * Time.deltaTime));
-                }
-            
-                if (_thisKB.sKey.isPressed)
-                {
-                    _thisRB.linearVelocity = new Vector3(_thisRB.linearVelocity.x, 0, (_thisRB.linearVelocity.z - playerAccel * Time.deltaTime));
-                }
-    
-                if (_thisKB.aKey.isPressed)
-                {
-                    _thisRB.linearVelocity = new Vector3((_thisRB.linearVelocity.x - playerAccel * Time.deltaTime), 0, _thisRB.linearVelocity.z);
-                }
-    
-                if (_thisKB.dKey.isPressed)
-                {
-                    _thisRB.linearVelocity = new Vector3((_thisRB.linearVelocity.x + playerAccel * Time.deltaTime), 0, _thisRB.linearVelocity.z);
-                }
-
-                if (_thisKB.rightShiftKey.isPressed)
-                {
-                    
-                }
+                _thisRB.linearVelocity = Vector3.ClampMagnitude(_thisRB.linearVelocity, playerSpeed);
             }
-            else
+
+            if (myController.leftStick.up.isPressed)
             {
-                if (_thisRB.linearVelocity.magnitude > playerSpeed)
-                {
-                    _thisRB.linearVelocity = Vector3.ClampMagnitude(_thisRB.linearVelocity, playerSpeed);
-                }
+                _thisRB.linearVelocity = new Vector3(_thisRB.linearVelocity.x, 0, (_thisRB.linearVelocity.z + playerAccel * Time.deltaTime));
+            }
+        
+            if (myController.leftStick.down.isPressed)
+            {
+                _thisRB.linearVelocity = new Vector3(_thisRB.linearVelocity.x, 0, (_thisRB.linearVelocity.z - playerAccel * Time.deltaTime));
+            }
 
-                if (_thisKB.iKey.isPressed)
-                {
-                    _thisRB.linearVelocity = new Vector3(_thisRB.linearVelocity.x, 0, (_thisRB.linearVelocity.z + playerAccel * Time.deltaTime));
-                }
+            if (myController.leftStick.left.isPressed)
+            {
+                _thisRB.linearVelocity = new Vector3((_thisRB.linearVelocity.x - playerAccel * Time.deltaTime), 0, _thisRB.linearVelocity.z);
+            }
 
-                if (_thisKB.kKey.isPressed)
-                {
-                    _thisRB.linearVelocity = new Vector3(_thisRB.linearVelocity.x, 0, (_thisRB.linearVelocity.z - playerAccel * Time.deltaTime));
-                }
+            if (myController.leftStick.right.isPressed)
+            {
+                _thisRB.linearVelocity = new Vector3((_thisRB.linearVelocity.x + playerAccel * Time.deltaTime), 0, _thisRB.linearVelocity.z);
+            }
 
-                if (_thisKB.jKey.isPressed)
-                {
-                    _thisRB.linearVelocity = new Vector3((_thisRB.linearVelocity.x - playerAccel * Time.deltaTime), 0, _thisRB.linearVelocity.z);
-                }
-
-                if (_thisKB.lKey.isPressed)
-                {
-                    _thisRB.linearVelocity = new Vector3((_thisRB.linearVelocity.x + playerAccel * Time.deltaTime), 0, _thisRB.linearVelocity.z);
-                }
-
-                if (_thisKB.leftShiftKey.isPressed)
-                {
-
-                }
+            if (_thisKB.rightShiftKey.isPressed)
+            {
+                GameObject slapInstant = Instantiate(slapObject, this.transform.position, this.transform.rotation);
+                slapInstant.transform.parent = this.transform;
             }
         }
     }
