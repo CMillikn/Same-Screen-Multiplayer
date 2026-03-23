@@ -1,16 +1,17 @@
+using System.Collections;
 using UnityEngine;
 
 public class SelfDestructScript : MonoBehaviour
 {
-    
+    public float selfDestructTime;
     void Start()
     {
-        
+        StartCoroutine(Self());
     }
 
-    // Update is called once per frame
-    void Update()
+    IEnumerator Self()
     {
-        
+        yield return new WaitForSeconds(selfDestructTime);
+        Destroy(gameObject);
     }
 }

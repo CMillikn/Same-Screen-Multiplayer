@@ -6,8 +6,11 @@ public class ConradGameManager : MonoBehaviour
 {
     public static ConradGameManager Instance;
     [SerializeField] int maxPlayers;
-    public List<PlayerSlot> players = new List<PlayerSlot>();
-    public List<Gamepad> gamepads = new List<Gamepad>();
+    public List<Gamepad> players = new List<Gamepad>();
+    public List<Joystick> joyPlayers = new List<Joystick>();
+    public int numberOfPlayers;
+    public List<GameObject> AAAAAAAAAAAAAA = new List<GameObject>();
+    public bool hiFuckYouUnity;
     [SerializeField] private GameObject playerObject;
     [SerializeField] private GameObject spawnPoint;
     private MovementScript playerScript;
@@ -28,7 +31,8 @@ public class ConradGameManager : MonoBehaviour
     void Start()
     {
         DetectExistingGamepads();
-        
+        DetectExistingJoySticks();
+        GeneratePlayers();
     }
 
     // Update is called once per frame
@@ -42,28 +46,59 @@ public class ConradGameManager : MonoBehaviour
         foreach (var pad in Gamepad.all)
         {
             AddPlayer(pad);
-            gamepads.Add(pad);
+            //gamepads.Add(pad);
         }
+    }
+
+    private void DetectExistingJoySticks()
+    {
+        foreach (var joyStick in Joystick.all)
+        {
+            AddJoyPlayer(joyStick);
+        } 
     }
 
     private void AddPlayer(Gamepad pad)
     {
         if (players.Count >= maxPlayers)
             return;
+        
+        players.Add(pad);
+    }
 
-        PlayerSlot newPlayer = new PlayerSlot(pad);
-        players.Add(newPlayer);
+    private void AddJoyPlayer(Joystick joystick)
+    {
+        if (players.Count >= maxPlayers)
+            return;
+        
+        joyPlayers.Add(joystick);
     }
 
     private void GeneratePlayers()
     {
-        foreach (PlayerSlot player in players)
+        foreach (Gamepad pad in players)
         {
+            numberOfPlayers++;
             Vector3 spawnPos = new Vector3(spawnPoint.transform.position.x + Random.Range(-1f,1f), spawnPoint.transform.position.y, spawnPoint.transform.position.z  + Random.Range(-1f,1f));
             GameObject instantObject = Instantiate(playerObject, spawnPos, Quaternion.identity);
-            playerScript = instantObject.GetComponent<MovementScript>();
-            playerScript.playerNumber = player.selectedIndex + 1;
-            playerScript.myController = player.gamepad;
+            playerScript = instantObject.GetComponentInChildren<MovementScript>();
+            playerScript.isGamepadControlled = true;
+            playerScript.myController = pad;
+            playerScript.playerNumber = numberOfPlayers;
+            //playerScript = instantObject.GetComponent<MovementScript>();
+            //playerScript.playerNumber = player.selectedIndex + 1;
+            //playerScript.myController = player.gamepad;
+        }
+
+        foreach (Joystick joystick in joyPlayers)
+        {
+            numberOfPlayers++;
+            Vector3 spawnPos = new Vector3(spawnPoint.transform.position.x + Random.Range(-1f,1f), spawnPoint.transform.position.y, spawnPoint.transform.position.z  + Random.Range(-1f,1f));
+            GameObject instantObject = Instantiate(playerObject, spawnPos, Quaternion.identity);
+            playerScript = instantObject.GetComponentInChildren<MovementScript>();
+            playerScript.isGamepadControlled = false;
+            playerScript.myJoystick = joystick;
+            playerScript.playerNumber = numberOfPlayers;
         }
     }
 }
