@@ -8,11 +8,13 @@ public class ConradGameManager : MonoBehaviour
     [SerializeField] int maxPlayers;
     public List<Gamepad> players = new List<Gamepad>();
     public List<Joystick> joyPlayers = new List<Joystick>();
+    public List<GameObject> playerObjects;
     public int numberOfPlayers;
     public List<GameObject> AAAAAAAAAAAAAA = new List<GameObject>();
     public bool hiFuckYouUnity;
     [SerializeField] private GameObject playerObject;
     [SerializeField] private GameObject spawnPoint;
+    
     private MovementScript playerScript;
 
     void Awake()
@@ -81,6 +83,7 @@ public class ConradGameManager : MonoBehaviour
             numberOfPlayers++;
             Vector3 spawnPos = new Vector3(spawnPoint.transform.position.x + Random.Range(-1f,1f), spawnPoint.transform.position.y, spawnPoint.transform.position.z  + Random.Range(-1f,1f));
             GameObject instantObject = Instantiate(playerObject, spawnPos, Quaternion.identity);
+            playerObjects.Add(instantObject);
             playerScript = instantObject.GetComponentInChildren<MovementScript>();
             playerScript.isGamepadControlled = true;
             playerScript.myController = pad;
@@ -95,6 +98,7 @@ public class ConradGameManager : MonoBehaviour
             numberOfPlayers++;
             Vector3 spawnPos = new Vector3(spawnPoint.transform.position.x + Random.Range(-1f,1f), spawnPoint.transform.position.y, spawnPoint.transform.position.z  + Random.Range(-1f,1f));
             GameObject instantObject = Instantiate(playerObject, spawnPos, Quaternion.identity);
+            playerObjects.Add(instantObject);
             playerScript = instantObject.GetComponentInChildren<MovementScript>();
             playerScript.isGamepadControlled = false;
             playerScript.myJoystick = joystick;
