@@ -1,6 +1,8 @@
-using System.Collections.Generic;   
+using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class ConradGameManager : MonoBehaviour
 {
@@ -14,6 +16,7 @@ public class ConradGameManager : MonoBehaviour
     public bool hiFuckYouUnity;
     [SerializeField] private GameObject playerObject;
     [SerializeField] private GameObject spawnPoint;
+    public TextMeshProUGUI winnerText;
     
     private MovementScript playerScript;
 
@@ -40,7 +43,19 @@ public class ConradGameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (numberOfPlayers == 1)
+        {
+            winnerText.text = $"Winner!";
+        }
+        else
+        {
+            winnerText.text = "";
+        }
+        Keyboard thisKeyboard = Keyboard.current;
+        if (thisKeyboard.rKey.wasPressedThisFrame)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
     }
     
     private void DetectExistingGamepads()

@@ -15,12 +15,14 @@ public class WatchmanScript : MonoBehaviour
     public Light spotLight;
     public bool canSwap;
     public bool canSwapClock;
-    public GameObject killSplosion;
+    public GameObject owieSplosion;
     public List<GameObject> cornerObjects;
     public float moveSpeed;
     public bool isClockwise;
     public float clockSwapTimer;
     public float clockSwapVariance;
+    public float damagePlayer;
+    public float speedUp;
 
     public enum cardinalLocation
     {
@@ -35,6 +37,7 @@ public class WatchmanScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        moveSpeed = moveSpeed + (speedUp*Time.deltaTime);
         this.transform.LookAt(centerPoint.transform.position);
         RaycastHit hit;
 
@@ -148,8 +151,8 @@ public class WatchmanScript : MonoBehaviour
                     {
                         if (isKilling )
                         {
-                            Instantiate(killSplosion, hit.transform.position, Quaternion.identity);
-                            Destroy(playerScript.gameObject);
+                            playerScript.GetHurt(damagePlayer);
+                            Instantiate(owieSplosion, hit.transform.position, Quaternion.identity);
                         }
                     }
                 }

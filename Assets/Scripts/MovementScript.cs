@@ -4,6 +4,7 @@ using System.Collections;
 using UnityEngine.InputSystem;
 using NUnit.Framework;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class MovementScript : MonoBehaviour
 {
@@ -28,6 +29,7 @@ public class MovementScript : MonoBehaviour
     public bool isGamepadControlled;
     public float magnitudeDisplay;
     [SerializeField] private ParticleSystem smokeCloud;
+    public Image healthBarFill;
 
     void Start()
     {
@@ -41,18 +43,22 @@ public class MovementScript : MonoBehaviour
         if (playerNumber == 1)
         {
             _thisMat.color = Color.red;
+            healthBarFill.color = Color.red;
         }
         else if (playerNumber == 2)
         {
             _thisMat.color = Color.yellow;
+            healthBarFill.color = Color.yellow;
         }
         else if (playerNumber == 3)
         {
             _thisMat.color = Color.green;
+            healthBarFill.color = Color.green;
         }
         else
         {
             _thisMat.color = Color.cyan;
+            healthBarFill.color = Color.cyan;
         }
     }
 
@@ -99,7 +105,7 @@ public class MovementScript : MonoBehaviour
                     _thisRB.linearVelocity = new Vector3((_thisRB.linearVelocity.x + playerAccel * Time.deltaTime), 0, _thisRB.linearVelocity.z);
                 }
     
-                if (myController.buttonNorth.wasPressedThisFrame)
+                if (myController.buttonEast.wasPressedThisFrame || myController.buttonNorth.wasPressedThisFrame || myController.buttonSouth.wasPressedThisFrame || myController.buttonWest.wasPressedThisFrame)
                 {
                     if (canSlap)
                     {
